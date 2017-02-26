@@ -38,3 +38,6 @@ Calculate and display a histogram showing how much money countries spend per yea
 
 ## Problem 2 
 Display the same information as in Problem 1 as a pie chart.
+
+## Problem 3
+Select any 20 countries. Create a 2D graph with 'Per capita total spending' on the horizontal axis and 'Doctors per 10,000 population' on the vertical axis. Represent every country as a colored circle with the diameter proportional to the life expectancy (LE) for that country. For example, you could use the value LE – 45 (i.e., subtract 45 from each LE) to make the difference more pronounced.  Change the color of the circles every 5 years: 55 to 60, 61 to 65, 65 to 70, etc. Display country names next to the circles. 
