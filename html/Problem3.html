@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<!------------------------------------------------------------
+ ! CSCI - E63, HARVARD UNIVERSITY
+ ! MIT License Copyright (c) 2017 magistraludi
+ !------------------------------------------------------------>
+
+<html lang="en">
+  <body>
+    <!-- setup styles for bubbles -->
+    <style>
+      .d3-tip {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 139, 0.8);
+        color: #fff;
+        border-radius: 2px;
+      }
+      
+      .axis path, .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+    </style>
+    <script src="d3/d3.min.js"></script>
+
+<script>
+
+// ------------------------------------------------------------------
+// Read in the health statistics data from .csv file 
+// ------------------------------------------------------------------
+d3.csv("prob3_data.csv", 
+       function(error, csvdata) {
+     healthviz(csvdata);
+}); 
+
+// ------------------------------------------------------------------
+// Main bubble graph building function
+// ------------------------------------------------------------------
+function healthviz(csvdata) {
+    // colors used for the circles
+    var color = d3.scale.category10();
+
+    // value ranges for the axes
+    var xmin = 0;
+    var xmax = 10000;
+    var ymin = 0;
+    var ymax = 40;
+
+    // graph dimensions
+    var margin = {top: 100, right: 60, bottom: 60, left: 60};
+    var width = 680 - margin.left - margin.right;
+    var height = 500 - margin.top - margin.bottom;
+
+    // scale for the x axis
+    var x = d3.scale.linear()
+      .domain([0, (xmax - xmin)])
+      .range([0, width]);
+
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom");
+
+    // scale for the y axis (y=0 at the top, so range must be flipped)
+    var y = d3.scale.linear()
+      .domain([0, (ymax - ymin)])
+      .range([height, 0]);
+	
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .ticks(8)
+      .orient("left");
+
+    // place the pie chart in the "magistraludi_d3_pb3" div
+    var svg = d3.select("#magistraludi_d3_pb3").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // title for the graph
+    svg.append("text")
+      .attr("x", (width / 10))             
+      .attr("y", 0 - (margin.top / 2))
+      .attr("font-weight", "bold")
+      .attr("font-size", "20")
+      .attr("font-family", "Verdana")
+      .text("Problem 3: Healthcare Visualization");
+    
+    // add bubbles of correct size at correct location
+    var circ = svg.selectAll("circle")
+      .data(csvdata)
+      .enter()
+      .append("g")
+      .attr("class", "circle");
+    
+    circ.append("circle")
+      .attr("fill", function(d) { 
+          return color(Math.floor(d.LifeE/5)); 
+      })
+      .attr("cx", function(d) { 
+          return x(d.Spending); 
+      })
+      .attr("cy", function(d) { 
+          return y(d.Doctors); 
+      })
+      .attr("r", function(d) { 
+          return (d.LifeE-45)/4; 
+      });
+
+    // add country names above the bubbles
+    var txt = svg.selectAll("text")
+    .data(csvdata)
+    .enter()
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", function(d) { return x(d.Spending); })
+    .attr("y", function(d) { return y(d.Doctors)-9; })
+    .attr("fill", "black")
+    .attr("font-size", "11px")
+    .text(function(d) { return d.Location; });
+    
+    // append x axis and its label
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+    svg.append("text")
+      .attr("class", "xlabel")
+      .attr("text-anchor", "middle")
+      .attr("x", width / 2)
+      .attr("y", height + margin.bottom / 1.2)
+      .text("Per capita total spending on health (PPP int. $)");
+
+    // append y axis and its label
+    svg.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(0,0)")
+      .call(yAxis);
+    svg.append("text")
+      .attr("class", "ylabel")
+      .attr("y", 0 - margin.left) // x and y switched due to rotation
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("transform", "rotate(-90)")
+      .style("text-anchor", "middle")
+      .text("Doctors per 10,000 population");
+}
+
+</script>
+<div id="magistraludi_d3_pb3" class="graph"></div>
+</body>
+</html>
