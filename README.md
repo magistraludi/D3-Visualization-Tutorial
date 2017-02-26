@@ -1,5 +1,5 @@
 # D3-Visualization-Tutorial
-This tutorial is based on my solutions to four problems assigned as part of the course CSCI-E63 Big Data Analytics at Harvard University in Spring 2015.
+This tutorial is based on my solutions to three problems assigned as part of the course CSCI-E63 Big Data Analytics at Harvard University in Spring 2015.
 
 ##  Dependencies
 D3 (or Data-Driven Documents)  is a Javascript library for in-browser visualization and document manipulation based on data. For this project we need d3.js or d3.min.js both of which can be obtained from http://d3js.org/ . 
@@ -30,10 +30,11 @@ Bangladesh	57
 Barbados	1523
 …
 ```
+## Project Structure
+I created a main file 'index.html' which references three additional .html pages: 'Problem1.html', 'Problem2.html', and 'Problem 3.html'. The file consists of a header section and three ```<div>``` tags corresponding to each of the problem solutions. I specified some style settings for both the header and the ```<div>``` tags in a ```<style>``` tag. 
 
 ## Problem 1
-Calculate and display a histogram showing how much money countries spend per year per citizen. Experiment with buckets of different widths: 200, 500, and 1000. Space out the bars of your graph to make it visually more appealing. Add x and y axis to your plot with appropriate scales. When you hover over a bar in your histogram display the list of countries in that bucket. Change the color
-of the bar over which you hover.
+Calculate and display a histogram showing how much money countries spend per year per citizen. Experiment with buckets of different widths: 200, 500, and 1000. Space out the bars of your graph to make it visually more appealing. Add x and y axis to your plot with appropriate scales. When you hover over a bar in your histogram display the list of countries in that bucket. Change the color of the bar over which you hover.
 
 ## Problem 2 
 Display the same information as in Problem 1 as a pie chart.
