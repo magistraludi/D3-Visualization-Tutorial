@@ -30,9 +30,6 @@ Bangladesh	57
 Barbados	1523
 …
 ```
-## Project Structure
-I created a main file 'index.html' which references three additional .html pages: 'Problem1.html', 'Problem2.html', and 'Problem 3.html'. The file consists of a header section and three ```<div>``` tags corresponding to each of the problem solutions. I specified some style settings for both the header and the ```<div>``` tags in a ```<style>``` tag. 
-
 ## Problem 1
 Calculate and display a histogram showing how much money countries spend per year per citizen. Experiment with buckets of different widths: 200, 500, and 1000. Space out the bars of your graph to make it visually more appealing. Add x and y axis to your plot with appropriate scales. When you hover over a bar in your histogram display the list of countries in that bucket. Change the color of the bar over which you hover.
 
@@ -181,7 +178,7 @@ var tip = d3.tip()
     svg.call(tip);
 ```
 The resulting graph:
-[I'm an inline-style l
+[https://github.com/magistraludi/D3-Visualization-Tutorial/tree/master/html]
 
 ## Problem 2 
 Display the same information as in Problem 1 as a pie chart.
