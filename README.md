@@ -178,7 +178,7 @@ var tip = d3.tip()
     svg.call(tip);
 ```
 The resulting graph:
-[https://github.com/magistraludi/D3-Visualization-Tutorial/tree/master/html]
+https://github.com/magistraludi/D3-Visualization-Tutorial/tree/master/html/Problem1.html
 
 ## Problem 2 
 Display the same information as in Problem 1 as a pie chart.
