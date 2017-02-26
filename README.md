@@ -76,7 +76,7 @@ The data is loaded and parsed for usage in histogram construction into a data st
 // ------------------------------------------------------------------
 // Read in the spending data from .csv file 
 // ------------------------------------------------------------------
-d3.csv("prob1_spending.csv", parser,
+d3.csv("prob1_data.csv", parser,
        function(error, csvdata) {
        spendinghist(csvdata);
 }); 
@@ -141,8 +141,8 @@ var y = d3.scale.linear()
 ```
 The svg object is created inside the ```<div>``` tag associated with Problem 1: 
 ```
-// place the histogram in the "hw8_pb1" div
-var svg = d3.select("#hw8_pb1").append("svg")
+// place the histogram in the "magistraludi_d3_pb1" div
+var svg = d3.select("#magistraludi_d3_pb1").append("svg")
 	  .attr("width", width + margin.left + margin.right)
 	  .attr("height", height + margin.top + margin.bottom)
 	  .append("g")
@@ -180,7 +180,8 @@ var tip = d3.tip()
         return '<table id="tiptable">' + d.meta + "</table>";});
     svg.call(tip);
 ```
-
+The resulting graph:
+[I'm an inline-style l
 
 ## Problem 2 
 Display the same information as in Problem 1 as a pie chart.
