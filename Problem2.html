@@ -1,0 +1,189 @@
+<!DOCTYPE HTML>
+<!------------------------------------------------------------
+ ! CSCI - E63, HARVARD UNIVERSITY
+ ! MIT License Copyright (c) 2017 magistraludi
+ !------------------------------------------------------------>
+
+<html lang="en">
+  <body>
+    <!-- setup styles for histogram bars and mouseovers -->
+    <style>
+      .d3-tip {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(255, 42, 43, 0.8);
+        color: #fff;
+        border-radius: 2px;
+      }
+      .arc {
+        fill: orange;
+      }
+      .arc:hover{
+        fill: orangered;
+      }                                                           
+    </style>
+
+    <!-- include d3 and d3.tip packages -->
+    <script src="d3/d3.min.js"></script>
+    <!-- tooltips for d3.js SVG visualizations -->
+    <script src="d3-tip/d3.tip.v0.6.3.js"></script>
+
+<script>
+
+// ------------------------------------------------------------------
+// Read in the spending data from .csv file 
+// ------------------------------------------------------------------
+d3.csv("prob1_data.csv", parser,
+       function(error, csvdata) {
+     spendingpie(csvdata);
+}); 
+
+// ------------------------------------------------------------------
+// Helper function to parse spending info
+// ------------------------------------------------------------------
+function parser(d) {
+    d.pSpending = +d.Spending;
+    return d;
+}
+
+// ------------------------------------------------------------------
+// Main piechart-bilding function
+// ------------------------------------------------------------------
+function spendingpie(csvdata) {
+
+    // circular "histogram" slices and dimension
+    var binsize = 200; // modify this for different bin sizes
+    var minbin = 0;
+    var maxbin = 10000;
+    var numbins = (maxbin - minbin) / binsize;
+    var binAngle = 0.02; // space between slices in radians
+
+    // graph margins
+    var margin = {top: 20, right: 0, bottom: 20, left: 0};
+    var width = 650 - margin.left - margin.right;
+    var height = 450 - margin.top - margin.bottom;
+    
+    // pie chart parameters
+    var radius = Math.min(width, height) / 3;
+    var donutWidth = radius;
+
+    // setup data structure holding the histogram
+    var histtotal = 0;
+    histdata = new Array(numbins);
+    for (var i = 0; i < numbins; i++) {
+		  histdata[i] = { numcountry: 0, meta: ""};
+    }
+
+    // fill histdata with # countries in each bin and
+    // meta data consisting of country list for each bin
+    csvdata.forEach(function(d) {
+		  var bin = Math.floor((d.pSpending - minbin) / binsize);
+		  if ((bin.toString() != "NaN") && (bin < histdata.length)) {
+			   histdata[bin].numcountry += 1;
+			   histdata[bin].meta += "<tr><td>" + d.Location +	"</td><td>" + "$"+
+				        d.pSpending.toFixed(0) + "</td></tr>";
+        histtotal += 1;
+		  }
+    });
+
+    // place the pie chart in the "magistraludi_d3_pb2" div
+    var svg = d3.select("#magistraludi_d3_pb2").append("svg")
+    .attr('width', width)
+    .attr('height', height)
+    .append('g')
+    .attr('transform', 'translate(' + ((width + margin.left + margin.right) / 2) + 
+            ',' + ((height + margin.top + margin.bottom) / 2) + ')');
+
+    // setup the tooltip
+    var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .direction('e')
+    .offset([0, 20])
+    .html(function(d) {
+      return '<table id="tiptable2">' + d.meta + "</table>";
+    });
+    svg.call(tip);
+
+    // create the pie chart
+    var pie = d3.layout.pie()
+      .value(function(d) { return d.numcountry; })
+      .padAngle(binAngle)
+      .sort(null);
+    var arc = d3.svg.arc()
+      .innerRadius(radius - donutWidth)
+      .outerRadius(radius);
+    var path = svg.selectAll("path")
+            .data(pie(histdata))
+            .enter()
+            .append("path")
+            .attr("class", "arc")
+            .attr("d", arc)
+            .data(histdata)
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide);   
+
+    // add some labels around the outer rim of the pie
+    var text = svg.selectAll("text").data(pie(histdata))
+            .enter()
+            .append("text")
+            .attr("text-anchor", "middle")
+            .attr("x", function(d) {
+              var a = d.endAngle - Math.PI/2;
+              return d.x = Math.cos(a) * (radius + 8);
+            })
+            .attr("y", function(d) {
+              var a = d.endAngle - Math.PI/2;
+              return d.y = Math.sin(a) * (radius + 8);
+            })
+            .text(function(d, i) { 
+              if (i>0) {
+                if(histdata[i].numcountry<8) {
+                  if(i%(binsize/20)==1)
+                    return (i+1)*binsize;
+                  else
+                    return ""; 
+                }
+                else 
+                  return (i+1)*binsize; 
+              }
+              else
+                return "";
+            });
+
+    // add graph title above the pie chart
+    svg.append("text")
+      .attr("x", -(width / 2.9))             
+      .attr("y", -(height / 2))
+      .attr("font-weight", "bold")
+      .attr("font-size", "20")
+      .attr("font-family", "Verdana")
+      .text("Problem 2: #Countries by Their Total Spending");
+      
+    // additional rim labels      
+    svg.append("text")
+      .attr("text-anchor", "middle")
+      .attr("x", Math.cos(2*Math.PI*histdata[0].numcountry/histtotal - binAngle*numbins/Math.PI - Math.PI/2) * (radius + 8))             
+      .attr("y", Math.sin(2*Math.PI*histdata[0].numcountry/histtotal - binAngle*numbins/Math.PI - Math.PI/2) * (radius + 8))
+      //.data(histdata)
+      .attr('transform', 'rotate(' + 0 + ')')
+      .text(binsize); 
+    svg.append("text")
+      .attr("text-anchor", "middle")
+      .attr("x", Math.cos(Math.PI/2) * (radius + 8)-10)             
+      .attr("y", Math.sin(3*Math.PI/2) * (radius + 8)-20)
+      .attr('transform', 'rotate(' + 0 + ')')
+      .text(maxbin+' | 0');
+
+    // bottom caption
+    svg.append("text")
+      .attr("text-anchor", "middle")
+      .attr("x", 0)
+      .attr("y", height / 2.3)
+      .text("Per capita total spending on health (PPP int. $)");         
+}
+
+</script>
+<div id="magistraludi_d3_pb2" class="graph"></div>
+</body>
+</html>
