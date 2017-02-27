@@ -73,7 +73,7 @@ The data is loaded and parsed for usage in histogram construction into a data st
 // ------------------------------------------------------------------
 // Read in the spending data from .csv file 
 // ------------------------------------------------------------------
-d3.csv("prob1_data.csv", parser,
+d3.csv("Data/prob1_data.csv", parser,
        function(error, csvdata) {
        spendinghist(csvdata);
 }); 
@@ -273,7 +273,7 @@ The file ['Problem3.html'](https://github.com/magistraludi/D3-Visualization-Tuto
 // ------------------------------------------------------------------
 // Read in the health statistics data from .csv file 
 // ------------------------------------------------------------------
-d3.csv("prob3_data.csv", 
+d3.csv("Data/prob3_data.csv", 
     function(error, csvdata) {
       healthviz(csvdata);
 });  
