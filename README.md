@@ -183,5 +183,64 @@ https://github.com/magistraludi/D3-Visualization-Tutorial/blob/master/Problem1.h
 ## Problem 2 
 Display the same information as in Problem 1 as a pie chart.
 
+The overall logic is the same as in Problem 1. The changes pertain to displaying a round “histogram” in the form of a pie chart instead of the classical rectangular one. Loading the data from the .csv file and binning the values into a histogram data structure are identical to Problem 1. The main difference comes from the replacing of the rectangular bars with a pie object to which arc objects representing pie slices are appended:
+
+```
+// create the pie chart
+var pie = d3.layout.pie()
+      .value(function(d) { return d.numcountry; })
+      .padAngle(binAngle)
+      .sort(null);
+var arc = d3.svg.arc()
+      .innerRadius(radius - donutWidth)
+      .outerRadius(radius);
+var path = svg.selectAll("path")
+            .data(pie(histdata))
+            .enter()
+            .append("path")
+            .attr("class", "arc")
+            .attr("d", arc)
+            .data(histdata)
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide);   
+```
+Specific attributes define the appearance of the pie and its slices:
+```
+// pie chart parameters
+var radius = Math.min(width, height) / 3;
+var donutWidth = radius; 
+var binAngle = 0.02; // space between slices in radians 
+```
+I wanted to also add the equivalent of the x-axis scale from the rectangular histogram as labels arranged in a circle outside the outer rim of the pie: starting at $0 spending (12:00 o’clock) and finishing at the same point with $10,000 in spending after a full rotation. In between I tried to avoid displaying equidistant labels to prevent unsightly overlaps.
+```
+// add some labels around the outer rim of the pie
+var text = svg.selectAll("text").data(pie(histdata))
+            .enter()
+            .append("text")
+            .attr("text-anchor", "middle")
+            .attr("x", function(d) {
+              var a = d.endAngle - Math.PI/2;
+              return d.x = Math.cos(a) * (radius + 8);
+            })
+            .attr("y", function(d) {
+              var a = d.endAngle - Math.PI/2;
+              return d.y = Math.sin(a) * (radius + 8);
+            })
+            .text(function(d, i) { 
+              if (i>0) {
+                if(histdata[i].numcountry<8) {
+                  if(i%(binsize/20)==1)
+                    return (i+1)*binsize;
+                  else
+                    return ""; 
+                }
+                else 
+                  return (i+1)*binsize; 
+              }
+              else
+                return "";
+            });
+```
+
 ## Problem 3
-Select any 20 countries. Create a 2D graph with 'Per capita total spending' on the horizontal axis and 'Doctors per 10,000 population' on the vertical axis. Represent every country as a colored circle with the diameter proportional to the life expectancy (LE) for that country. For example, you could use the value LE – 45 (i.e., subtract 45 from each LE) to make the difference more pronounced.  Change the color of the circles every 5 years: 55 to 60, 61 to 65, 65 to 70, etc. Display country names next to the circles. 
+Select a subset of the countries. Create a 2D graph with 'Per capita total spending' on the horizontal axis and 'Doctors per 10,000 population' on the vertical axis. Represent every country as a colored circle with the diameter proportional to the life expectancy (LE) for that country. For example, you could use the value LE – 45 (i.e., subtract 45 from each LE) to make the difference more pronounced.  Change the color of the circles for every five years difference in LE: 55 to 60, 61 to 65, 65 to 70, etc. Display country names next to the circles. 
