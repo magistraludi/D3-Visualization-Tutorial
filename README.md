@@ -246,6 +246,8 @@ var text = svg.selectAll("text").data(pie(histdata))
 The resulting graph:
 https://github.com/magistraludi/D3-Visualization-Tutorial/blob/master/Problem2.html
 
+![D3 pie chart](/images/d3-pie.png)
+
 ## Problem 3
 Select a subset of the countries. Create a 2D graph with 'Per capita total spending' on the horizontal axis and 'Doctors per 10,000 population' on the vertical axis. Represent every country as a colored circle with the diameter proportional to the life expectancy (LE) for that country. For example, you could use the value LE – 45 (i.e., subtract 45 from each LE) to make the difference more pronounced.  Change the color of the circles for every five years difference in LE: 55 to 60, 61 to 65, 65 to 70, etc. Display country names next to the circles. 
 
@@ -328,3 +330,5 @@ var txt = svg.selectAll("text")
 ```
 The result:
 https://github.com/magistraludi/D3-Visualization-Tutorial/blob/master/Problem3.html
+
+![D3 bubble graph](/images/d3-bubble.png)
