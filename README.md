@@ -241,6 +241,88 @@ var text = svg.selectAll("text").data(pie(histdata))
                 return "";
             });
 ```
+The resulting graph:
+https://github.com/magistraludi/D3-Visualization-Tutorial/blob/master/Problem2.html
 
 ## Problem 3
 Select a subset of the countries. Create a 2D graph with 'Per capita total spending' on the horizontal axis and 'Doctors per 10,000 population' on the vertical axis. Represent every country as a colored circle with the diameter proportional to the life expectancy (LE) for that country. For example, you could use the value LE – 45 (i.e., subtract 45 from each LE) to make the difference more pronounced.  Change the color of the circles for every five years difference in LE: 55 to 60, 61 to 65, 65 to 70, etc. Display country names next to the circles. 
+
+For this problem I extracted data into a file prob3_data.csv. The file is as below. For the life expectancy (column LifeE) I calculated the average expectancy per country from the data given across three years (alternatively, one could use data from a single year, like 2010, with similar results).
+```
+Location	Spending	Doctors	LifeE
+Afghanistan	44	2.1	60
+Canada	4404	19.8	81
+Central African Republic	31	0.8	49
+Cyprus	1842	25.84	79
+Czech Republic	2051	36.72	78
+Germany	4332	36.01	81
+Guatemala	325	9	71
+Lebanon	980	35.4	80
+Libya	713	19	75
+Lithuania	1300	36.14	74
+Luxembourg	6743	27.66	81
+Poland	1476	21.57	77
+Portugal	2818	38.68	80
+Romania	811	22.69	74
+Tunisia	483	11.9	75
+United Kingdom	3480	27.43	81
+United States	8362	24.22	79
+```
+The file ['Problem3.html'](https://github.com/magistraludi/D3-Visualization-Tutorial/blob/master/Problem3.html) contains the code for displaying the scatter plot with text labels. The data is loaded as before:
+```
+// ------------------------------------------------------------------
+// Read in the health statistics data from .csv file 
+// ------------------------------------------------------------------
+d3.csv("prob3_data.csv", 
+    function(error, csvdata) {
+      healthviz(csvdata);
+});  
+
+The main components of the graph are the linear scales for the x and y axes and the circles:
+// scale for the x axis
+var x = d3.scale.linear()
+      .domain([0, (xmax - xmin)])
+      .range([0, width]);
+// scale for the y axis (y=0 at the top, so range must be flipped)
+var y = d3.scale.linear()
+      .domain([0, (ymax - ymin)])
+      .range([height, 0]);
+…
+
+// add bubbles of correct size at correct location
+var circ = svg.selectAll("circle")
+      .data(csvdata)
+      .enter()
+      .append("g")
+      .attr("class", "circle");
+    
+circ.append("circle")
+      .attr("fill", function(d) { 
+          return color(Math.floor(d.LifeE/5)); 
+      })
+      .attr("cx", function(d) { 
+          return x(d.Spending); 
+      })
+      .attr("cy", function(d) { 
+          return y(d.Doctors); 
+      })
+      .attr("r", function(d) { 
+          return (d.LifeE-45)/4; 
+      });
+```
+The text labels are placed above the circles:
+```
+// add country names above the bubbles
+var txt = svg.selectAll("text")
+    .data(csvdata)
+    .enter()
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", function(d) { return x(d.Spending); })
+    .attr("y", function(d) { return y(d.Doctors)-9; })
+    .attr("fill", "black")
+    .attr("font-size", "11px")
+    .text(function(d) { return d.Location; });
+```
+The result:
+https://github.com/magistraludi/D3-Visualization-Tutorial/blob/master/Problem3.html
