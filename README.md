@@ -33,7 +33,7 @@ Barbados	1523
 ## Problem 1
 Calculate and display a histogram showing how much money countries spend per year per citizen. Experiment with buckets of different widths: 200, 500, and 1000. Space out the bars of your graph to make it visually more appealing. Add x and y axis to your plot with appropriate scales. When you hover over a bar in your histogram display the list of countries in that bucket. Change the color of the bar over which you hover.
 
-The file 'Problem1.html' contains the histogram code. It begins with a style section in which histogram bars and mouse-over styles are set:
+The file ['Problem1.html'](https://github.com/magistraludi/D3-Visualization-Tutorial/blob/master/Problem1.html) contains the histogram code. It begins with a style section in which histogram bars and mouse-over styles are set:
 ```
 <!-- setup styles for histogram bars and mouseovers -->
 <style>
