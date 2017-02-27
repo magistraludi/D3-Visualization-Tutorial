@@ -180,6 +180,8 @@ var tip = d3.tip()
 The resulting graph:
 https://github.com/magistraludi/D3-Visualization-Tutorial/blob/master/Problem1.html
 
+![D3 histogram](/images/d3-bar.png)
+
 ## Problem 2 
 Display the same information as in Problem 1 as a pie chart.
 
